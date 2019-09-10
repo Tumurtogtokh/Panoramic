@@ -1,0 +1,2 @@
+# Panoramic
+Creates Panoramic picture
