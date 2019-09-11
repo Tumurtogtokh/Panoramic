@@ -1,8 +1,11 @@
-#include <opencv2/core.hpp>
-#include <opencv2/highgui.hpp>
 #include <vector>
 #include <string>
 #include <iostream>
+
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/stitching.hpp>
 
 #include <Panoramic/image.h>
 #include <Panoramic/processor.h>
@@ -13,6 +16,7 @@ Processor::Processor(const std::string &name, const char *output_dir_path)
     this->process_name_ = name;
     this->images_ = std::vector<Image>();
     this->output_dir_ = get_abs_path(output_dir_path);
+    this->input_dir_ = "";
 }
 
 Processor::Processor(const std::string &name, const char *input_path, const char *output_dir_path)
@@ -20,6 +24,7 @@ Processor::Processor(const std::string &name, const char *input_path, const char
     this->process_name_ = name;
     this->images_ = std::vector<Image>();
     this->output_dir_ = get_abs_path(output_dir_path);
+    this->input_dir_ = get_abs_path(input_path);
 
     stringvec files;
     read_directory(input_path, files);
@@ -78,6 +83,48 @@ Image Processor::ApplyReverse(Image &img)
     return Image(img.Path(), processed_image);
 }
 
+Image Processor::ApplyGaussianBlur(Image &img, cv::Size ksize)
+{
+    cv::Mat blurred_image;
+    cv::GaussianBlur(img.CVImage(), blurred_image, ksize, 0, 0, cv::BORDER_DEFAULT);
+    return Image(img.Path(), blurred_image);
+}
+
+void Processor::ApplyMedianBlur(Image &src, Image &dest, int ksize)
+{
+    cv::medianBlur(src.CVImage(), dest.CVImage(), ksize);
+}
+
+void Processor::MakePanorama(Image &img)
+{
+    std::vector<cv::Mat> raw_imgs;
+    for (auto image : this->images_)
+    {
+        raw_imgs.emplace_back(image.CVImage());
+        std::cout << "Path: " << image.Path() << std::endl;
+    }
+
+    cv::Mat pano;
+    // bool try_use_gpu = false;
+    // bool divide_images = false;
+    cv::Stitcher::Mode mode = cv::Stitcher::PANORAMA;
+
+    cv::Ptr<cv::Stitcher> stitcher = cv::Stitcher::create(mode);
+    cv::Stitcher::Status status = stitcher->stitch(raw_imgs, pano);
+    if (status != cv::Stitcher::OK)
+    {
+        std::cout << "Can't stitch images, error code = " << int(status) << std::endl;
+        // return std::EXIT_FAILURE;
+    }
+    else
+    {
+        cv::imwrite("result_pano.jpg", pano);
+        std::cout << "stitching completed successfully\n"
+                  << std::endl;
+    }
+
+    // return EXIT_SUCCESS;
+}
 /**
  * Save an image to output dir
  */

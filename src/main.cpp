@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     Processor proc("Processor", output);
 
     // Loads names of image files
-    stringvec files = load_images(input);
+    stringvec files = load_image_names(input);
 
     // Start image processing
     std::cout << "-------------------------------------------------------" << std::endl;
@@ -45,6 +45,26 @@ int main(int argc, char *argv[])
         Image processed = proc.ApplyReverse(img);
         proc.SaveImage(processed);
     }
+
+    // Image image2(image);
+    // proc.ApplyMedianBlur(image, image2, 37);
+
+    // cv::Size ksize(11,11);
+    // Image processed = proc.ApplyGaussianBlur(image, ksize);
+    // proc.DisplayImages(image, image2);
+
+    // Image image("../data/lena.jpg");
+    // Processor proc("Processor", output);
+
+    // // Loads names of image files
+    // stringvec files = load_image_names(input);
+    // for (auto i = 0; i < files.size(); i++)
+    // {
+    //     Image img((input + files.at(i)).c_str());
+    //     proc.AddImage(img);
+    // }
+
+    // proc.MakePanorama(image);
 
     exit(0);
 }

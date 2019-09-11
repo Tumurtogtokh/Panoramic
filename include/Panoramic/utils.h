@@ -34,7 +34,7 @@ std::string get_abs_path(const char *path)
     return std::string(resolved_path);
 }
 
-stringvec load_images(const char* input)
+stringvec load_image_names(const char* input)
 {
     stringvec files;
     read_directory(input, files);

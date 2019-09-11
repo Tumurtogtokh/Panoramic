@@ -23,6 +23,13 @@ Image::Image(const char *path, cv::Mat &img)
     this->name_ = std::string(path).substr(pos);
 }
 
+Image::Image(const Image& img)
+{
+    this->path_ = img.path_;
+    this->image_ = img.image_.clone();
+    this->name_ = img.name_;
+}
+
 /**
  * Return CV Matrix of Image object
  */

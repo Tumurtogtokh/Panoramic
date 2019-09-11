@@ -5,8 +5,10 @@
 
 class Image{
     public:
-        Image(const char* path);
-        Image(const char* path, cv::Mat& img);
+        Image(const char* path); // default constructor
+        Image(const char* path, cv::Mat& img); // overloaded constructor
+        Image(const Image&); // copy constructor
+        // ~Image(); // de-constructor
         cv::Mat CVImage();
         const char* Path();
         std::string Name();
