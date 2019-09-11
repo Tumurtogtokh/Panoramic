@@ -26,7 +26,7 @@ void read_directory(const std::string &name, stringvec &v)
     closedir(dirp);
 }
 
-std::string get_abs_path(const char *path)
+std::string get_absolute_path(const char *path)
 {
     char resolved_path[PATH_MAX];
     realpath(path, resolved_path);

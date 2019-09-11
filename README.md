@@ -58,4 +58,4 @@ All header files are in include directory. Implementations of those are in src d
 1. Clone this repo.
 2. Make a build directory in the top level directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
-4. Run it: `./bin/panoramic`.
+4. Run it: `../bin/panoramic`.

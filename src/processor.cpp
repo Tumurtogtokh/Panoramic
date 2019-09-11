@@ -15,7 +15,7 @@ Processor::Processor(const std::string &name, const char *output_dir_path)
 {
     this->process_name_ = name;
     this->images_ = std::vector<Image>();
-    this->output_dir_ = get_abs_path(output_dir_path);
+    this->output_dir_ = get_absolute_path(output_dir_path);
     this->input_dir_ = "";
 }
 
@@ -23,8 +23,8 @@ Processor::Processor(const std::string &name, const char *input_path, const char
 {
     this->process_name_ = name;
     this->images_ = std::vector<Image>();
-    this->output_dir_ = get_abs_path(output_dir_path);
-    this->input_dir_ = get_abs_path(input_path);
+    this->output_dir_ = get_absolute_path(output_dir_path);
+    this->input_dir_ = get_absolute_path(input_path);
 
     stringvec files;
     read_directory(input_path, files);

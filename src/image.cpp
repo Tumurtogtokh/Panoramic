@@ -9,7 +9,7 @@
 
 Image::Image(const char *path)
 {
-    this->path_ = get_abs_path(path);
+    this->path_ = get_absolute_path(path);
     this->image_ = cv::imread(path);
     auto const pos = std::string(path).find_last_of("/");
     this->name_ = std::string(path).substr(pos);
@@ -17,7 +17,7 @@ Image::Image(const char *path)
 
 Image::Image(const char *path, cv::Mat &img)
 {
-    this->path_ = get_abs_path(path);
+    this->path_ = get_absolute_path(path);
     this->image_ = img;
     auto const pos = std::string(path).find_last_of("/");
     this->name_ = std::string(path).substr(pos);
