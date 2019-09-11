@@ -1,10 +1,15 @@
+#pragma once
+
 #include <sys/types.h>
 #include <dirent.h>
 #include <algorithm>
 #include <iterator>
 #include <vector>
 #include <string>
+#include <stdlib.h>
 
+namespace
+{
 typedef std::vector<std::string> stringvec;
 
 void read_directory(const std::string &name, stringvec &v)
@@ -20,3 +25,19 @@ void read_directory(const std::string &name, stringvec &v)
     }
     closedir(dirp);
 }
+
+std::string get_abs_path(const char *path)
+{
+    char resolved_path[PATH_MAX];
+    realpath(path, resolved_path);
+
+    return std::string(resolved_path);
+}
+
+stringvec load_images(const char* input)
+{
+    stringvec files;
+    read_directory(input, files);
+    return files;
+}
+} // namespace

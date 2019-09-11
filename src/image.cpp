@@ -1,36 +1,48 @@
-#include <image.h>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <vector>
 #include <string>
-#include <stdlib.h>
-#include <stdio.h>
-#include <linux/limits.h>
+#include <iostream>
+
+#include <Panoramic/image.h>
+#include <Panoramic/utils.h>
 
 Image::Image(const char *path)
 {
-    char resolved_path[PATH_MAX];
-    realpath(path, resolved_path);
-
-    this->path = std::string(resolved_path);
-    this->image = cv::imread(path);
+    this->path_ = get_abs_path(path);
+    this->image_ = cv::imread(path);
+    auto const pos = std::string(path).find_last_of("/");
+    this->name_ = std::string(path).substr(pos);
 }
 
 Image::Image(const char *path, cv::Mat &img)
 {
-    char resolved_path[PATH_MAX];
-    realpath(path, resolved_path);
-    
-    this->path = std::string(resolved_path);
-    this->image = img;
+    this->path_ = get_abs_path(path);
+    this->image_ = img;
+    auto const pos = std::string(path).find_last_of("/");
+    this->name_ = std::string(path).substr(pos);
 }
 
+/**
+ * Return CV Matrix of Image object
+ */
 cv::Mat Image::CVImage()
 {
-    return this->image;
+    return this->image_;
 }
 
+/**
+ * Return path of the Image
+ */
 const char *Image::Path()
 {
-    return this->path.c_str();
+    return this->path_.c_str();
+}
+
+/**
+ * Return name of the Image
+ */
+std::string Image::Name()
+{
+    return this->name_;
 }

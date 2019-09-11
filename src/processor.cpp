@@ -2,21 +2,52 @@
 #include <opencv2/highgui.hpp>
 #include <vector>
 #include <string>
-#include <image.h>
-#include <processor.h>
+#include <iostream>
 
-Processor::Processor(const std::string &name)
+#include <Panoramic/image.h>
+#include <Panoramic/processor.h>
+#include <Panoramic/utils.h>
+
+Processor::Processor(const std::string &name, const char *output_dir_path)
 {
-    this->process_name = name;
-    this->images = std::vector<Image>();
+    this->process_name_ = name;
+    this->images_ = std::vector<Image>();
+    this->output_dir_ = get_abs_path(output_dir_path);
 }
 
+Processor::Processor(const std::string &name, const char *input_path, const char *output_dir_path)
+{
+    this->process_name_ = name;
+    this->images_ = std::vector<Image>();
+    this->output_dir_ = get_abs_path(output_dir_path);
+
+    stringvec files;
+    read_directory(input_path, files);
+
+    for (auto f : files)
+        this->images_.emplace_back(Image(f.c_str()));
+}
+
+/**
+ * Return output_dir
+ */
+std::string Processor::OutputDir()
+{
+    return this->output_dir_;
+}
+
+/**
+ * Add an image to Processor
+ */
 void Processor::AddImage(Image &img)
 {
-    this->images.emplace_back(img);
+    this->images_.emplace_back(img);
 }
 
-Image Processor::ApplyReverse(Image& img)
+/**
+ * Reverse RGB channels of an image
+ */
+Image Processor::ApplyReverse(Image &img)
 {
     int x, y;
     cv::Vec3b pixel;
@@ -47,7 +78,15 @@ Image Processor::ApplyReverse(Image& img)
     return Image(img.Path(), processed_image);
 }
 
-void Processor::DisplayImages(Image& orig, Image& proccessed)
+/**
+ * Save an image to output dir
+ */
+void Processor::SaveImage(Image &img)
+{
+    cv::imwrite(this->output_dir_ + img.Name(), img.CVImage());
+}
+
+void Processor::DisplayImages(Image &orig, Image &proccessed)
 {
     cv::namedWindow("Image");
     cv::namedWindow("Processed Image");

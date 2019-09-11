@@ -9,7 +9,9 @@ class Image{
         Image(const char* path, cv::Mat& img);
         cv::Mat CVImage();
         const char* Path();
+        std::string Name();
     private:
-        cv::Mat image;
-        std::string path;
+        cv::Mat image_;
+        std::string path_;
+        std::string name_;
 };

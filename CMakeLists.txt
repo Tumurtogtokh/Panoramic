@@ -1,4 +1,4 @@
-project(Panoramic)
+project(panoramic)
 cmake_minimum_required(VERSION 3.0)
 set(CMAKE_CXX_STANDARD 14)
 
@@ -7,7 +7,7 @@ find_package(OpenCV REQUIRED )
 add_library(opencv INTERFACE )
 
 # Set additional flags.
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -lstdc++fs")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
