@@ -1,6 +1,6 @@
 #include <iostream>
 #include <thread>
-#include <typeinfo>
+#include <sys/stat.h>
 
 #include <Panoramic/image.h>
 #include <Panoramic/processor.h>
@@ -11,31 +11,39 @@
 */
 namespace
 {
-char *input = "../data/stitch/Stitch_examples";
+char *input;
 char *output = "../export/";
-
 } // namespace
 
 int main(int argc, char *argv[])
 {
     if (argc < 2)
     {
-        // std::cout << "Default: " << std::endl;
+        input = "../data/Stitch_examples/";
+    }
+    else if (argc == 2)
+    {
+        input = argv[1];
     }
     else if (argc == 3)
     {
-        input = argv[2];
+        input = argv[1];
+        output = argv[2];
     }
-    else if (argc == 4)
-    {
-        input = argv[2];
-        output = argv[3];
-    }
-    std::cout << "\nInput dir: " << input << "  " << "Output dir: " << output << std::endl;
+    std::cout << "\nInput dir: " << input << "  "
+              << "Output dir: " << output << std::endl;
     std::cout << "-------------------------------------------------------" << std::endl;
 
+    // Making export directory
+    const int dir_err = mkdir(output, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    if (-1 == dir_err)
+    {
+        std::cout << "Error creating output directory!\n" << std::endl;
+        exit(1);
+    }
+
     // Reading directories from input dir
-    const char *input_dir = "../data/Stitch_examples/";
+    const char *input_dir = input;
     stringvec directories;
     read_directory(input_dir, directories);
 
@@ -60,8 +68,9 @@ int main(int argc, char *argv[])
         auto thread_id = std::this_thread::get_id();
         std::stringstream ss;
         ss << thread_id;
+
         Processor proc("Img Processor thread - " + ss.str(), output);
-        
+
         // Adding images to Processor
         for (size_t i = 0; i < files.size(); i++)
         {
