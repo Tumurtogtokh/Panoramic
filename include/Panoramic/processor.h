@@ -26,6 +26,6 @@ public:
 private:
     std::vector<Image> images_;
     std::string process_name_;
-    std::string output_dir_;
-    std::string input_dir_;
+    char* output_dir_;
+    char* input_dir_;
 };

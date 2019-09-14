@@ -52,12 +52,12 @@ void read_directory(const char* &name, stringvec &v)
     closedir(dirp);
 }
 
-std::string get_absolute_path(const char *path)
+char* get_absolute_path(const char *path)
 {
     char resolved_path[PATH_MAX];
     realpath(path, resolved_path);
 
-    return std::string(resolved_path);
+    return resolved_path;
 }
 
 stringvec load_image_names(const char* input)
