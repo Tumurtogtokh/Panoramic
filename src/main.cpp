@@ -11,7 +11,7 @@
 */
 namespace
 {
-char *input = "../data/stitch/";
+char *input = "../data/stitch/Stitch_examples";
 char *output = "../export/";
 
 } // namespace
@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 {
     if (argc < 2)
     {
-        std::cout << "Default: " << std::endl;
+        // std::cout << "Default: " << std::endl;
     }
     else if (argc == 3)
     {
@@ -31,9 +31,7 @@ int main(int argc, char *argv[])
         input = argv[2];
         output = argv[3];
     }
-
-    // Initialise image processor
-    Processor proc("Test Panorama", output);
+    std::cout << "\nInput dir: " << input << "  " << "Output dir: " << output << std::endl;
     std::cout << "-------------------------------------------------------" << std::endl;
 
     // Reading directories from input dir
@@ -47,20 +45,26 @@ int main(int argc, char *argv[])
     std::cout << "-------------------------------------------------------" << std::endl;
 
     // Start image processing
-    std::cout << "-------------------------------------------------------" << std::endl;
     std::string curr_input;
+    unsigned int nCores = std::thread::hardware_concurrency();
+    std::cout << "This machine supports concurrency with " << nCores << " cores available" << std::endl;
 
     for (auto dir : directories)
     {
         // Loads names of image files
         curr_input = get_absolute_path(std::string(input_dir + dir).c_str());
-        std::cout << "Curr dir: " << curr_input << std::endl;
+        std::cout << "\nCurr dir: " << curr_input << std::endl;
         stringvec files = load_image_names(curr_input.c_str());
 
+        // Initialise image processor
+        auto thread_id = std::this_thread::get_id();
+        std::stringstream ss;
+        ss << thread_id;
+        Processor proc("Img Processor thread - " + ss.str(), output);
+        
         // Adding images to Processor
         for (size_t i = 0; i < files.size(); i++)
         {
-            std::cout << "input image: " << curr_input + files.at(i) << std::endl;
             Image img((curr_input + "/" + files.at(i)).c_str());
             proc.AddImage(img);
         }

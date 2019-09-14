@@ -71,7 +71,7 @@ void Processor::AddImage(Image &img)
     this->images_.emplace_back(img);
 }
 
-void Processor::LoadImages(const char* input)
+void Processor::LoadImages(const char *input)
 {
 
     // Loads names of image files
@@ -136,8 +136,9 @@ void Processor::MakePanorama(std::string pano_name)
     for (auto image : this->images_)
     {
         raw_imgs.emplace_back(image.CVImage());
-        // std::cout << "Path: " << image.Path() << std::endl;
     }
+
+    std::cout << "[LOG] Making Panorama by : " << this->Name() << std::endl;
 
     cv::Mat pano;
     // bool try_use_gpu = false;
@@ -152,10 +153,9 @@ void Processor::MakePanorama(std::string pano_name)
     }
     else
     {
+        std::cout << "[LOG] Stitching completed successfully" << std::endl;
         cv::imwrite(this->OutputDir() + "/" + pano_name, pano);
         std::cout << "[LOG] Panomara is saved to: " << this->OutputDir() + "/" + pano_name << std::endl;
-        std::cout << "stitching completed successfully\n"
-                  << std::endl;
     }
 }
 /**
