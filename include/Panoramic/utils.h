@@ -1,6 +1,7 @@
 #pragma once
 
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <dirent.h>
 #include <algorithm>
 #include <iterator>
@@ -65,4 +66,17 @@ stringvec load_image_names(const char* input)
     read_files_names(input, files);
     return files;
 }
+
+int dir_exists(const char *path)
+{
+    struct stat info;
+
+    if(stat( path, &info ) != 0)
+        return 0;
+    else if(info.st_mode & S_IFDIR)
+        return 1;
+    else
+        return 0;
+}
+
 } // namespace

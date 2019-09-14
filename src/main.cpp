@@ -11,17 +11,13 @@
 */
 namespace
 {
-char *input;
+char *input = "../data/Stitch_examples/";
 char *output = "../export/";
 } // namespace
 
 int main(int argc, char *argv[])
 {
-    if (argc < 2)
-    {
-        input = "../data/Stitch_examples/";
-    }
-    else if (argc == 2)
+    if (argc == 2)
     {
         input = argv[1];
     }
@@ -35,11 +31,14 @@ int main(int argc, char *argv[])
     std::cout << "-------------------------------------------------------" << std::endl;
 
     // Making export directory
-    const int dir_err = mkdir(output, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-    if (-1 == dir_err)
+    if (!dir_exists(output))
     {
-        std::cout << "Error creating output directory!\n" << std::endl;
-        exit(1);
+        const int dir_err = mkdir(output, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+        if (-1 == dir_err)
+        {
+            std::cout << "Error creating output directory at: " << output << std::endl;
+            exit(1);
+        }
     }
 
     // Reading directories from input dir
