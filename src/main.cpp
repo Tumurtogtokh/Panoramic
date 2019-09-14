@@ -11,8 +11,8 @@
 */
 namespace
 {
-char *input = "../data/Stitch_examples/";
-char *output = "../export/";
+const char *input = "../data/Stitch_examples/";
+const char *output = "../export/";
 } // namespace
 
 int main(int argc, char *argv[])
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     std::cout << "-------------------------------------------------------" << std::endl;
 
     // Making export directory
-    if (!dir_exists(output))
+    if (!Utils::dir_exists(output))
     {
         const int dir_err = mkdir(output, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
         if (-1 == dir_err)
@@ -43,8 +43,8 @@ int main(int argc, char *argv[])
 
     // Reading directories from input dir
     const char *input_dir = input;
-    stringvec directories;
-    read_directory(input_dir, directories);
+    Utils::stringvec directories;
+    Utils::read_directory(input_dir, directories);
 
     std::cout << "Directories inside " << input_dir << " : " << std::endl;
     for (auto d : directories)
@@ -59,9 +59,9 @@ int main(int argc, char *argv[])
     for (auto dir : directories)
     {
         // Loads names of image files
-        curr_input = get_absolute_path(std::string(input_dir + dir).c_str());
+        curr_input = Utils::get_absolute_path(std::string(input_dir + dir).c_str());
         std::cout << "\nCurr dir: " << curr_input << std::endl;
-        stringvec files = load_image_names(curr_input.c_str());
+        Utils::stringvec files = Utils::load_image_names(curr_input.c_str());
 
         // Initialise image processor
         auto thread_id = std::this_thread::get_id();

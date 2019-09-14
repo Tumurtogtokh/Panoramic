@@ -15,7 +15,7 @@ Processor::Processor(const std::string &name, const char *output_dir_path)
 {
     this->process_name_ = name;
     this->images_ = std::vector<Image>();
-    this->output_dir_ = get_absolute_path(output_dir_path);
+    this->output_dir_ = Utils::get_absolute_path(output_dir_path);
     this->input_dir_ = "";
 }
 // Processor(const std::string &name, const char *input_path, const char *output_dir_path);
@@ -23,11 +23,11 @@ Processor::Processor(const std::string &name, const char *input_path, const char
 {
     this->process_name_ = name;
     this->images_ = std::vector<Image>();
-    this->output_dir_ = get_absolute_path(output_dir_path);
-    this->input_dir_ = get_absolute_path(input_path);
+    this->output_dir_ = Utils::get_absolute_path(output_dir_path);
+    this->input_dir_ = Utils::get_absolute_path(input_path);
 
-    stringvec files;
-    read_files_names(input_dir_, files);
+    Utils::stringvec files;
+    Utils::read_files_names(input_dir_, files);
 
     for (auto f : files)
     {
@@ -75,7 +75,7 @@ void Processor::LoadImages(const char *input)
 {
 
     // Loads names of image files
-    stringvec files = load_image_names(input);
+    Utils::stringvec files = Utils::load_image_names(input);
 
     // Adding images to Processor
     for (size_t i = 0; i < files.size(); i++)
