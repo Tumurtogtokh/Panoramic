@@ -18,7 +18,7 @@ Processor::Processor(const std::string &name, const char *output_dir_path)
     this->output_dir_ = get_absolute_path(output_dir_path);
     this->input_dir_ = "";
 }
-
+// Processor(const std::string &name, const char *input_path, const char *output_dir_path);
 Processor::Processor(const std::string &name, const char *input_path, const char *output_dir_path)
 {
     this->process_name_ = name;
@@ -27,10 +27,27 @@ Processor::Processor(const std::string &name, const char *input_path, const char
     this->input_dir_ = get_absolute_path(input_path);
 
     stringvec files;
-    read_directory(input_path, files);
+    read_files_names(input_dir_, files);
 
     for (auto f : files)
-        this->images_.emplace_back(Image(f.c_str()));
+    {
+        // this->images_.emplace_back(Image(f.c_str()));
+        std::cout << "Proc In path: " << f << std::endl;
+    }
+
+    // stringvec files = load_image_names(input);
+
+    // // Adding images to Processor
+    // for (size_t i = 0; i < files.size(); i++)
+    // {
+    //     Image img((input + files.at(i)).c_str());
+    //     proc.AddImage(img);
+    // }
+}
+
+void Processor::ClearImages()
+{
+    this->images_.clear();
 }
 
 /**
@@ -41,6 +58,11 @@ std::string Processor::OutputDir()
     return this->output_dir_;
 }
 
+std::string Processor::Name()
+{
+    return this->process_name_;
+}
+
 /**
  * Add an image to Processor
  */
@@ -49,6 +71,19 @@ void Processor::AddImage(Image &img)
     this->images_.emplace_back(img);
 }
 
+void Processor::LoadImages(const char* input)
+{
+
+    // Loads names of image files
+    stringvec files = load_image_names(input);
+
+    // Adding images to Processor
+    for (size_t i = 0; i < files.size(); i++)
+    {
+        Image img((input + files.at(i)).c_str());
+        this->AddImage(img);
+    }
+}
 /**
  * Reverse RGB channels of an image
  */
@@ -95,13 +130,13 @@ void Processor::ApplyMedianBlur(Image &src, Image &dest, int ksize)
     cv::medianBlur(src.CVImage(), dest.CVImage(), ksize);
 }
 
-void Processor::MakePanorama(Image &img)
+void Processor::MakePanorama(std::string pano_name)
 {
     std::vector<cv::Mat> raw_imgs;
     for (auto image : this->images_)
     {
         raw_imgs.emplace_back(image.CVImage());
-        std::cout << "Path: " << image.Path() << std::endl;
+        // std::cout << "Path: " << image.Path() << std::endl;
     }
 
     cv::Mat pano;
@@ -114,16 +149,14 @@ void Processor::MakePanorama(Image &img)
     if (status != cv::Stitcher::OK)
     {
         std::cout << "Can't stitch images, error code = " << int(status) << std::endl;
-        // return std::EXIT_FAILURE;
     }
     else
     {
-        cv::imwrite("result_pano.jpg", pano);
+        cv::imwrite(this->OutputDir() + "/" + pano_name, pano);
+        std::cout << "[LOG] Panomara is saved to: " << this->OutputDir() + "/" + pano_name << std::endl;
         std::cout << "stitching completed successfully\n"
                   << std::endl;
     }
-
-    // return EXIT_SUCCESS;
 }
 /**
  * Save an image to output dir

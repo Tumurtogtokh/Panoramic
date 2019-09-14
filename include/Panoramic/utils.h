@@ -12,13 +12,38 @@ namespace
 {
 typedef std::vector<std::string> stringvec;
 
-void read_directory(const std::string &name, stringvec &v)
+/**
+ * Retrieve names of content in directory
+ * 
+*/
+void read_files_names(const std::string &name, stringvec &v)
 {
     DIR *dirp = opendir(name.c_str());
     struct dirent *dp;
     while ((dp = readdir(dirp)) != NULL)
     {
         if (std::string(dp->d_name).length() > 2)
+        {
+            v.push_back(dp->d_name);
+        }
+    }
+    closedir(dirp);
+}
+
+/**
+ * Retrieve dir names in directory
+ * 
+*/
+void read_directory(const char* &name, stringvec &v)
+{
+    DIR *dirp = opendir(name);
+    struct dirent *dp;
+    std::string::size_type file_ext_idx;
+
+    while ((dp = readdir(dirp)) != NULL)
+    {   
+        file_ext_idx = std::string(dp->d_name).rfind('.');
+        if (file_ext_idx == std::string::npos)
         {
             v.push_back(dp->d_name);
         }
@@ -37,7 +62,7 @@ std::string get_absolute_path(const char *path)
 stringvec load_image_names(const char* input)
 {
     stringvec files;
-    read_directory(input, files);
+    read_files_names(input, files);
     return files;
 }
 } // namespace
