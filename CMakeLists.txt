@@ -7,7 +7,7 @@ find_package(OpenCV REQUIRED )
 add_library(opencv INTERFACE )
 
 # Set additional flags.
-set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -pthread")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
