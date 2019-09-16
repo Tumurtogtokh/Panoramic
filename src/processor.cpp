@@ -31,18 +31,8 @@ Processor::Processor(const std::string &name, const char *input_path, const char
 
     for (auto f : files)
     {
-        // this->images_.emplace_back(Image(f.c_str()));
-        std::cout << "Proc In path: " << f << std::endl;
+        this->images_.emplace_back(Image(f.c_str()));
     }
-
-    // stringvec files = load_image_names(input);
-
-    // // Adding images to Processor
-    // for (size_t i = 0; i < files.size(); i++)
-    // {
-    //     Image img((input + files.at(i)).c_str());
-    //     proc.AddImage(img);
-    // }
 }
 
 void Processor::ClearImages()

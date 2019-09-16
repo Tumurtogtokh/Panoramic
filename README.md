@@ -1,14 +1,13 @@
 # Panoramic
-Creates Panoramic picture
+Creates Panoramic picture from raw photos using OpenCV.
 
 ## Rubic points
 I have chosen Option2. 
 
 * Memory Management
   * The project makes use of references in function declarations.
-  * The project follows the Rule of 5. *TODO*
-  * The project uses move semantics to move data, instead of copying it, where possible. *TODO*
-  * The project uses smart pointers instead of raw pointers. *TODO*
+  * The project follows the Rule of 5.
+  * The project uses move semantics to move data, instead of copying it, where possible.
 * Object Oriented Programming
   * The project uses Object Oriented Programming techniques.
   * Classes use appropriate access specifiers for class members.
@@ -19,10 +18,7 @@ I have chosen Option2.
   * The project reads data from a file and process the data, or the program writes data to a file.
   * The project accepts user input and processes the input. 
 * Concurrency
-  * The project uses multithreading. *TODO*
-  * A promise and future is used in the project. *TODO*
-  * A mutex or lock is used in the project. *TODO*
-  * A condition variable is used in the project. *TODO*
+  * The project uses multithreading.
 
 ## Class structures
 All header files are in include directory. Implementations of those are in src directory. Include directory also has util header which has a few file I/O functions. 
@@ -39,6 +35,7 @@ All header files are in include directory. Implementations of those are in src d
   * get_abs_path converts a relative path to an absolute path
   * read_directory is a function to read and saves names of images.
   * load_image_names uses read_directory to create a vector of image names.
+  * dir_exists checks if a directory exists
 
 ## Dependencies for Running Locally
 * cmake >= 3.0
